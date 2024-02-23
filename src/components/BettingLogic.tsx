@@ -9,6 +9,7 @@ type BettingLogicProps = {
   onStartSession: () => void;
   placeBetClicked: boolean;
   showBetText: boolean;
+  gameResult: string | null;
 };
 
 const BettingLogic: React.FC<BettingLogicProps> = ({
@@ -19,6 +20,7 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
   showBetText,
   onCreate,
   onStartSession,
+  gameResult,
 }: BettingLogicProps) => {
   const placeBet = () => {
     if (isNaN(bet) || bet <= 0 || bet > balance) {
@@ -64,6 +66,13 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
       {showBetText && (
         <div className={style.animatedText}>
           You bet <span>{bet}</span> points!
+        </div>
+      )}
+      {gameResult && (
+        <div className={style.gameResult}>
+          {gameResult === 'won'
+            ? 'And You won!Congragulations!'
+            : ' And you lost.Try again.'}
         </div>
       )}
     </>

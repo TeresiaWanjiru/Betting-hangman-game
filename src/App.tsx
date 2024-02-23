@@ -23,11 +23,13 @@ function App() {
   const [betAddedBack, setBetAddedBack] = useState<boolean>(false);
   const [placeBetClicked, setPlaceBetClicked] = useState<boolean>(false);
   const [showBetText, setShowBetText] = useState<boolean>(false);
-  const [inputActive, setInputActive] = useState<boolean>(false); //ensures the input for placing bet is active upon playagain
 
   //timing states
   const [timeRemaining, setTimeRemaining] = useState<number>(60);
-  const [sessionStarted, setSessionStarted] = useState<boolean>(false);
+
+  //win or lose game states
+  const [gameResult, setGameResult] = useState<string | null>(null);
+  console.log('gameResult', gameResult);
 
   console.log(wordToGuess);
 
@@ -35,16 +37,16 @@ function App() {
     return !wordToGuess.includes(letter);
   });
 
-  const isLoser = wrongGuesses.length >= 6;
-  const isWinnerRef = useRef<boolean>(false);
-  isWinnerRef.current = isWinnerRef.current = wordToGuess
+  const isWordLoser = wrongGuesses.length >= 6;
+  const isWordWinnerRef = useRef<boolean>(false);
+  isWordWinnerRef.current = isWordWinnerRef.current = wordToGuess
     .split('')
     .every((letter) => lettersGuessed.includes(letter));
 
   //capturing key presses on physical board
   const addGuessedLetter = useCallback(
     (letter: string) => {
-      if (isLoser) return;
+      if (isWordLoser) return;
 
       setLettersGuessed((currentLetters) => {
         if (currentLetters.includes(letter)) {
@@ -63,7 +65,7 @@ function App() {
         return updatedLetters;
       });
     },
-    [isLoser, wordToGuess, points],
+    [isWordLoser, wordToGuess, points],
   );
 
   console.log('points', points);
@@ -111,22 +113,34 @@ function App() {
     if (points === 3 && !betAddedBack) {
       setBalance((prevBalance) => prevBalance + bet);
       setBetAddedBack(true); // this prevents further additions
+      setGameResult('won');
+    } else {
+      setGameResult('lost');
     }
   }, [points, bet, betAddedBack]);
 
   useEffect(() => {
-    setBetAddedBack(false);
-  }, [points]);
-
-  function handleTimeUp() {
-    setSessionActive(false);
-    wonBet();
-    setShowBetText(false);
-  }
-
-  useEffect(() => {
     wonBet();
   }, [points, wonBet]);
+
+  //ensures balance back to false so that the bet amount is added back only once after user wins
+  useEffect(() => {
+    setBetAddedBack(false);
+  }, [points]);
+  function resetGame() {
+    setWordToGuess(getWord());
+    setLettersGuessed([]);
+    setSessionActive(false);
+    setBalance(1000);
+    setBet(undefined);
+    setPoints(0);
+    setTimeRemaining(60);
+  }
+  function handleTimeUp() {
+    resetGame();
+    setShowBetText(false);
+    setPlaceBetClicked(false);
+  }
 
   const handleBetCreate = useCallback((newBet: number) => {
     setPlaceBetClicked(true);
@@ -142,14 +156,12 @@ function App() {
     console.log('Session has started');
 
     setSessionActive(true);
-    setSessionStarted(true);
     const id = window.setInterval(() => {
       setTimeRemaining((prevTime) => {
         if (prevTime > 0) {
           return prevTime - 1;
         } else {
           clearInterval(id);
-          // setIsPlayAgainButtonClicked(true);
           console.log('Game Over!');
           handleTimeUp();
           return 0;
@@ -167,26 +179,28 @@ function App() {
         <Timer timeRemaining={timeRemaining} />
         <div className={style.hangmanBackground}>
           <div
-            className={`${style.game_result} ${isLoser ? style.glow_lose : isWinnerRef.current ? style.glow_win : ''} `}
+            className={`${style.game_result} ${isWordLoser ? style.glow_lose : isWordWinnerRef.current ? style.glow_win : ''} `}
           >
             {wordToGuess
               .split('')
               .every((letter) => lettersGuessed.includes(letter))
               ? 'Correct!-Enter for next word'
               : ''}
-            {isLoser ? 'Wrong-Enter for next word' : ''}
+            {isWordLoser ? 'Wrong-Enter for next word' : ''}
           </div>
           <HangmanDrawing
             numbersGuessed={wrongGuesses.length}
             wordToGuess={wordToGuess}
           />
           <HangmanText
-            reveal={isLoser}
+            reveal={isWordLoser}
             lettersGuessed={lettersGuessed}
             wordToGuess={wordToGuess}
           />
           <HangmanKeyboard
-            disabled={isLoser || isWinnerRef.current || !sessionActive || !bet}
+            disabled={
+              isWordLoser || isWordWinnerRef.current || !sessionActive || !bet
+            }
             activeLetters={lettersGuessed.filter((letter) =>
               wordToGuess.includes(letter),
             )}
@@ -199,20 +213,12 @@ function App() {
       <BettingLogic
         onCreate={handleBetCreate}
         onStartSession={handleStartSession}
-        setPoints={setPoints}
-        points={points}
         balance={balance}
-        // setBalance={setBalance}
         bet={bet}
         setBet={setBet}
-        wonBet={wonBet}
-        betAddedBack={betAddedBack}
-        setBetAddedBack={setBetAddedBack}
-        placeBetClicked={placeBetClicked}
-        // setPlaceBetClicked={setPlaceBetClicked}
-        // setShowBetText={setShowBetText}
         showBetText={showBetText}
-        inputActive={inputActive}
+        placeBetClicked={placeBetClicked}
+        gameResult={gameResult}
       />
     </>
   );

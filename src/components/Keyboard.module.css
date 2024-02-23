@@ -335,6 +335,8 @@ span {
   font-size: 1rem;
   margin-top: 0.8rem;
 }
+.gameResult {
+}
 @keyframes shine {
   from {
     -webkit-mask-position: 150%;

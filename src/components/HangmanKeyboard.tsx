@@ -10,7 +10,7 @@ const KEYS: string[] = Array.from(
 
 // console.log(KEYS);
 
-type keyboardProps = {
+type KeyboardProps = {
   addGuessedLetter: (letter: string) => void;
   activeLetters: string[];
   inactiveLetters: string[];
@@ -21,7 +21,7 @@ const HangmanKeyboard = ({
   inactiveLetters,
   addGuessedLetter,
   disabled = false,
-}: keyboardProps) => {
+}: KeyboardProps) => {
   return (
     <div
       className={`${styles.poppins}`}

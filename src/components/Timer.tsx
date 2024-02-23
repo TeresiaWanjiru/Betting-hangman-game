@@ -1,8 +1,8 @@
-type timerProps = {
+type TimerProps = {
   timeRemaining: number;
 };
 
-const Timer = ({ timeRemaining }: timerProps) => {
+const Timer = ({ timeRemaining }: TimerProps) => {
   return (
     <>
       <div

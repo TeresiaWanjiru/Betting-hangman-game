@@ -1,10 +1,10 @@
 import style from './Keyboard.module.css';
 
-type pointsProps = {
+type PointsProps = {
   points: number;
 };
 
-const Points = ({ points }: pointsProps) => {
+const Points = ({ points }: PointsProps) => {
   return <div className={style.pointsContainer}>Points: {points}</div>;
 };
 
