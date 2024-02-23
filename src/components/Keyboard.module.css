@@ -1,0 +1,345 @@
+body {
+  background: rgba(0, 0, 0, 0.585);
+  background-image: url('data:image/svg+xml,%3Csvg width="42" height="44" viewBox="0 0 42 44" xmlns="http://www.w3.org/2000/svg"%3E%3Cg id="Page-1" fill="none" fill-rule="evenodd"%3E%3Cg id="brick-wall" fill="%239C92AC" fill-opacity="0.4"%3E%3Cpath d="M0 0h42v44H0V0zm1 1h40v20H1V1zM0 23h20v20H0V23zm22 0h20v20H22V23z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  height: auto;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+canvas {
+  width: 60%;
+  height: 98vh;
+  border: 2px solid #ddd;
+  display: block;
+  margin: 0 auto;
+  position: absolute;
+  z-index: -1;
+  transition: opacity 0.5s ease-in-out;
+  margin-bottom: 20px;
+}
+.poppins {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  color: bisque;
+}
+
+.btn {
+  width: 100%;
+  font-family: 'Poppins', sans-serif;
+  background-color: white;
+  border: 1px solid purple;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: black;
+  text-transform: uppercase;
+  padding: 0.3rem;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow:
+    1px 1px 0 rgba(73, 80, 87, 0.8),
+    inset -2px -2px 10px #131313;
+}
+
+.btn.active {
+  background-color: rgb(247, 197, 136);
+  color: white;
+  box-shadow:
+    1px 1px 0 rgba(73, 80, 87, 0.8),
+    inset -1px -3px 5px #131313;
+  transform: translate(2px, 2px);
+  transition: 0.2s;
+}
+.btn.inactive {
+  opacity: 0.3;
+  box-shadow:
+    1px 1px 0 rgba(73, 80, 87, 0.8),
+    inset -1px -3px 5px #131313;
+  transform: translate(2px, 2px);
+  transition: 0.2s;
+}
+.btn:hover:not(:disabled),
+.btn:focus:not(:disabled) {
+  background-color: rgb(247, 197, 136);
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.btn.active {
+  background-color: rgb(247, 197, 136);
+  color: white;
+}
+.hangmanBackgroundContainer {
+  max-width: 800px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 0 auto;
+  align-items: center;
+  overflow: hidden;
+}
+.hangmanBackground {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+.game_result {
+  font-size: 1.5rem;
+  text-align: center;
+  font-weight: 500;
+  position: absolute;
+  top: 93%;
+  left: 50%;
+  /* right: 50%; */
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+img.fadeInImage {
+  height: 100%;
+  position: absolute;
+  margin-bottom: 2rem;
+  z-index: -1;
+  animation: fadeIn 3s;
+}
+
+/* img.fadeInImage.show {
+  opacity: 1;
+} */
+
+.glow_win {
+  animation: glow-win 1s ease-in-out infinite alternate;
+}
+
+.glow_lose {
+  animation: glow-lose 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow-win {
+  from {
+    color: #fff;
+    text-shadow:
+      0 0 10px #059e51,
+      0 0 20px #059e51,
+      0 0 30px #059e51,
+      0 0 40px #059e51;
+  }
+
+  to {
+    color: rgba(194, 40, 255, 0.856);
+    text-shadow:
+      0 0 20px #059e51,
+      0 0 30px #059e51,
+      0 0 40px #059e51,
+      0 0 50px #059e51;
+  }
+}
+
+@keyframes glow-lose {
+  from {
+    color: #fff;
+    text-shadow:
+      0 0 10px #9e0505,
+      0 0 20px #9e0505,
+      0 0 30px #9e0505,
+      0 0 40px #9e0505;
+  }
+
+  to {
+    color: rgba(194, 40, 255, 0.856);
+    text-shadow:
+      0 0 20px #9e0505,
+      0 0 30px #9e0505,
+      0 0 40px #9e0505,
+      0 0 50px #9e0505;
+  }
+}
+
+/* neon button */
+.neon_btn {
+  color: #0d3c3c;
+  box-shadow:
+    0 0 5px #d10bf49b,
+    0 0 5px #d10bf49b inset;
+  border: 1px solid #d10bf49b;
+  z-index: 1;
+}
+.neon_btn:after {
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  box-shadow:
+    0 0 5px #d10bf49b,
+    0 0 5px #d10bf49b inset;
+  transition: all 0.3s ease;
+}
+.neon_btn:hover {
+  border: 1px solid #ddbde39b;
+}
+
+.neon_btn:active {
+  top: 2px;
+}
+.pointsContainer {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(213, 204, 204, 0.8);
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 20px;
+  font-weight: 600;
+  flex-direction: column;
+}
+.bettingLogic {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 10px;
+  color: #2d2c2c;
+  background-color: rgba(213, 204, 204, 0.8);
+  border-radius: 10px;
+  margin-right: 1.4rem;
+}
+
+span {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+}
+.betInput {
+  color: #7d0e9c;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-left: 2px;
+  box-shadow:
+    0 0 5px #d10bf49b,
+    0 0 5px #d10bf49b inset;
+  border: 1px solid #d10bf49b;
+  z-index: 1;
+  border-radius: 40px;
+  width: 7em;
+  height: 2rem;
+  padding: 0.4rem;
+}
+.betInput:after {
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  box-shadow:
+    0 0 5px #d10bf49b,
+    0 0 5px #e9ddeb9b inset;
+  transition: all 0.3s ease;
+}
+
+.glowBtn {
+  animation: glow-btn 1s ease-in-out infinite alternate;
+}
+@keyframes glow-btn {
+  from {
+    color: #242222;
+    text-shadow:
+      0 0 10px #7d0e9c,
+      0 0 20px #7d0e9c,
+      0 0 30px #7d0e9c,
+      0 0 40px #7d0e9c,
+      0 0 50px #7d0e9c,
+      0 0 60px #7d0e9c,
+      0 0 70px #7d0e9c;
+  }
+
+  to {
+    color: rgba(194, 40, 255, 0.856);
+    text-shadow:
+      0 0 20px #7d0e9c,
+      0 0 30px #7d0e9c,
+      0 0 40px #7d0e9c,
+      0 0 50px #7d0e9c,
+      0 0 60px #7d0e9c,
+      0 0 70px #7d0e9c;
+  }
+}
+.placeBetBtn {
+  margin-top: 1rem;
+  width: 30%;
+  align-self: center;
+}
+.animatedText {
+  position: fixed;
+  font-size: 25px;
+  text-transform: uppercase;
+  top: 65%;
+  right: 35px;
+  transform: translateY(-50%);
+  display: flex;
+  overflow: hidden;
+  color: #fff;
+  font-weight: 700;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  animation: shine 3s linear infinite;
+  -webkit-mask-image: linear-gradient(
+    -75deg,
+    rgba(0, 0, 0, 0.6) 70%,
+    #000 10%,
+    rgba(0, 0, 0, 0.6) 70%
+  );
+  mask-image: linear-gradient(
+    -75deg,
+    rgba(0, 0, 0, 0.6) 10%,
+    #000 10%,
+    rgba(0, 0, 0, 0.6) 70%
+  );
+  -webkit-mask-size: 200%;
+  mask-size: 200%;
+  animation-fill-mode: forwards;
+  animation: shine 2s linear infinite;
+}
+.animatedText span {
+  margin-right: 0.6rem;
+  margin-left: 0.6rem;
+  color: #110714;
+}
+.errorText {
+  color: #f40f0b;
+  font-weight: 700;
+  margin-left: 2.8rem;
+  font-size: 1rem;
+  margin-top: 0.8rem;
+}
+@keyframes shine {
+  from {
+    -webkit-mask-position: 150%;
+  }
+  to {
+    -webkit-mask-position: -50%;
+  }
+}
