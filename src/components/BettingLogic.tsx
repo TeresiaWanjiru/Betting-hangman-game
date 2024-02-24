@@ -10,6 +10,7 @@ type BettingLogicProps = {
   placeBetClicked: boolean;
   showBetText: boolean;
   gameResult: string | null;
+  sessionActive: boolean;
 };
 
 const BettingLogic: React.FC<BettingLogicProps> = ({
@@ -21,10 +22,15 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
   onCreate,
   onStartSession,
   gameResult,
+  sessionActive,
 }: BettingLogicProps) => {
   const placeBet = () => {
     if (isNaN(bet) || bet <= 0 || bet > balance) {
       console.error('Invalid bet amount');
+      return;
+    }
+    if (bet > balance) {
+      console.error('Insufficient balance');
       return;
     }
 
@@ -51,9 +57,11 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
             disabled={placeBetClicked}
           />
         </span>
-        {bet === 0 ? (
+        {bet <= 0 && <div className={style.errorText}>Invalid bet amount</div>}
+
+        {bet >= 1000 && (
           <div className={style.errorText}>Invalid bet amount</div>
-        ) : null}
+        )}
 
         <button
           className={style.placeBetBtn}
@@ -68,12 +76,14 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
           You bet <span>{bet}</span> points!
         </div>
       )}
-      {gameResult && (
+
+      {gameResult === 'won' && !sessionActive && (
         <div className={style.gameResult}>
-          {gameResult === 'won'
-            ? 'And You won!Congragulations!'
-            : ' And you lost.Try again.'}
+          And You won them!Congragulations!
         </div>
+      )}
+      {gameResult === 'lost' && !sessionActive && (
+        <div className={style.gameResult}>And You lost them.Try again</div>
       )}
     </>
   );

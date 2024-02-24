@@ -29,6 +29,7 @@ function App() {
 
   //win or lose game states
   const [gameResult, setGameResult] = useState<string | null>(null);
+
   console.log('gameResult', gameResult);
 
   console.log(wordToGuess);
@@ -113,9 +114,7 @@ function App() {
     if (points === 3 && !betAddedBack) {
       setBalance((prevBalance) => prevBalance + bet);
       setBetAddedBack(true); // this prevents further additions
-      setGameResult('won');
-    } else {
-      setGameResult('lost');
+      // setGameResult('won');
     }
   }, [points, bet, betAddedBack]);
 
@@ -133,9 +132,17 @@ function App() {
     setSessionActive(false);
     setBalance(1000);
     setBet(undefined);
-    setPoints(0);
+    // setPoints(0);
     setTimeRemaining(60);
   }
+  useEffect(() => {
+    if (points >= 3) {
+      setGameResult('won');
+    } else {
+      setGameResult('lost');
+    }
+  }, [points]);
+
   function handleTimeUp() {
     resetGame();
     setShowBetText(false);
@@ -144,6 +151,7 @@ function App() {
 
   const handleBetCreate = useCallback((newBet: number) => {
     setPlaceBetClicked(true);
+    setPoints(0);
     setBet(newBet);
     setBalance((prevBalance) => prevBalance - newBet);
     setBetAddedBack(true);
@@ -219,6 +227,7 @@ function App() {
         showBetText={showBetText}
         placeBetClicked={placeBetClicked}
         gameResult={gameResult}
+        sessionActive={sessionActive}
       />
     </>
   );
