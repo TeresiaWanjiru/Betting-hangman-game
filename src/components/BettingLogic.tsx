@@ -1,5 +1,6 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect, useRef } from 'react';
 import style from './Keyboard.module.css';
+import PointConfetti from './PointConfetti';
 
 type BettingLogicProps = {
   balance: number;
@@ -24,6 +25,17 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
   gameResult,
   sessionActive,
 }: BettingLogicProps) => {
+  const gameResultWonRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (gameResultWonRef.current) {
+      const rect = gameResultWonRef.current.getBoundingClientRect();
+      const x = rect.left;
+      const y = rect.top;
+      console.log('x and y of won text', x, y);
+    }
+  }, [gameResult]);
+
   const placeBet = () => {
     if (isNaN(bet) || bet <= 0 || bet > balance) {
       console.error('Invalid bet amount');
@@ -76,14 +88,16 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
           You bet <span>{bet}</span> points!
         </div>
       )}
-
       {gameResult === 'won' && !sessionActive && (
-        <div className={style.gameResult}>
-          And You won them!Congragulations!
-        </div>
+        <>
+          <div className={style.gameResult_won} ref={gameResultWonRef}>
+            You won! Congratulations!
+          </div>
+        </>
       )}
+      <PointConfetti />
       {gameResult === 'lost' && !sessionActive && (
-        <div className={style.gameResult}>And You lost them.Try again</div>
+        <div className={style.gameResult_lost}>You lost.Try again</div>
       )}
     </>
   );

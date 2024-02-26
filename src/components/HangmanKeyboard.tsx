@@ -7,11 +7,10 @@ const KEYS: string[] = Array.from(
   { length: endCharCode - startCharCode + 1 },
   (_, index) => String.fromCharCode(startCharCode + index),
 );
-
-// console.log(KEYS);
+console.log('KEYS', KEYS);
 
 type KeyboardProps = {
-  addGuessedLetter: (letter: string) => void;
+  OnAddGuessedLetter: (letter: string) => void;
   activeLetters: string[];
   inactiveLetters: string[];
   disabled: boolean;
@@ -19,7 +18,7 @@ type KeyboardProps = {
 const HangmanKeyboard = ({
   activeLetters,
   inactiveLetters,
-  addGuessedLetter,
+  OnAddGuessedLetter,
   disabled = false,
 }: KeyboardProps) => {
   return (
@@ -41,7 +40,7 @@ const HangmanKeyboard = ({
             className={`${styles.btn} ${isActive ? styles.active : ''} ${isNotActive ? styles.inactive : ''}`}
             disabled={isActive || isNotActive || disabled}
             key={index}
-            onClick={() => addGuessedLetter(key)}
+            onClick={() => OnAddGuessedLetter(key)}
           >
             {key}
           </button>

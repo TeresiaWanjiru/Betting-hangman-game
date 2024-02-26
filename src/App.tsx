@@ -17,6 +17,7 @@ function App() {
   const [wordToGuess, setWordToGuess] = useState(getWord);
   const [lettersGuessed, setLettersGuessed] = useState<string[]>([]);
   const [sessionActive, setSessionActive] = useState<boolean>(false);
+  const [gameSessionEnded, setGameSessionEnded] = useState<boolean>(false);
   const [balance, setBalance] = useState<number>(1000);
   const [bet, setBet] = useState<number | undefined>(undefined);
   const [points, setPoints] = useState<number>(0);
@@ -29,8 +30,6 @@ function App() {
 
   //win or lose game states
   const [gameResult, setGameResult] = useState<string | null>(null);
-
-  console.log('gameResult', gameResult);
 
   console.log(wordToGuess);
 
@@ -45,7 +44,7 @@ function App() {
     .every((letter) => lettersGuessed.includes(letter));
 
   //capturing key presses on physical board
-  const addGuessedLetter = useCallback(
+  const handleAddGuessedLetter = useCallback(
     (letter: string) => {
       if (isWordLoser) return;
 
@@ -80,7 +79,7 @@ function App() {
         if (!key.match(/^[a-z]$/)) return;
         e.preventDefault();
 
-        addGuessedLetter(key);
+        handleAddGuessedLetter(key);
       }
     };
     document.addEventListener('keypress', handler);
@@ -88,7 +87,7 @@ function App() {
     return () => {
       document.removeEventListener('keypress', handler);
     };
-  }, [lettersGuessed]);
+  }, [handleAddGuessedLetter, sessionActive, bet]);
 
   //handling enter key
   useEffect(() => {
@@ -109,44 +108,40 @@ function App() {
     };
   }, [lettersGuessed, sessionActive]);
 
-  //function that handles the betting balance when user wins
-  const wonBet = useCallback(() => {
+  // handles the betting balance when user wins
+  const handleWonBet = useCallback(() => {
     if (points === 3 && !betAddedBack) {
       setBalance((prevBalance) => prevBalance + bet);
-      setBetAddedBack(true); // this prevents further additions
-      // setGameResult('won');
+      setBetAddedBack(true);
     }
   }, [points, bet, betAddedBack]);
 
   useEffect(() => {
-    wonBet();
-  }, [points, wonBet]);
-
-  //ensures balance back to false so that the bet amount is added back only once after user wins
-  useEffect(() => {
-    setBetAddedBack(false);
+    handleWonBet();
+    setBetAddedBack(false); //balance back to false so that the bet amount is added back only once after user wins
   }, [points]);
-  function resetGame() {
+
+  function handleResetGame() {
+    setBalance(1000);
     setWordToGuess(getWord());
     setLettersGuessed([]);
     setSessionActive(false);
-    setBalance(1000);
     setBet(undefined);
-    // setPoints(0);
     setTimeRemaining(60);
   }
   useEffect(() => {
-    if (points >= 3) {
+    if (points >= 3 && gameSessionEnded) {
       setGameResult('won');
-    } else {
+    } else if (!sessionActive && gameSessionEnded) {
       setGameResult('lost');
     }
-  }, [points]);
+  }, [points, sessionActive, gameSessionEnded]);
 
   function handleTimeUp() {
-    resetGame();
+    handleResetGame();
     setShowBetText(false);
     setPlaceBetClicked(false);
+    setGameSessionEnded(true);
   }
 
   const handleBetCreate = useCallback((newBet: number) => {
@@ -159,7 +154,7 @@ function App() {
   }, []);
   const timer = useRef<number | undefined>(undefined);
 
-  //on clicking the place bet button the timer and session starts
+  //timer and session starts after clicking place bet
   const handleStartSession = useCallback(() => {
     console.log('Session has started');
 
@@ -213,7 +208,7 @@ function App() {
               wordToGuess.includes(letter),
             )}
             inactiveLetters={wrongGuesses}
-            addGuessedLetter={addGuessedLetter}
+            OnAddGuessedLetter={handleAddGuessedLetter}
           />
         </div>
       </div>
