@@ -22,14 +22,15 @@ function App() {
   const [bet, setBet] = useState<number | undefined>(undefined);
   const [points, setPoints] = useState<number>(0);
   const [betAddedBack, setBetAddedBack] = useState<boolean>(false);
-  const [placeBetClicked, setPlaceBetClicked] = useState<boolean>(false);
-  const [showBetText, setShowBetText] = useState<boolean>(false);
 
   //timing states
   const [timeRemaining, setTimeRemaining] = useState<number>(60);
 
-  //win or lose game states
-  const [gameResult, setGameResult] = useState<string | null>(null);
+  //win/lose and place bet clicked states
+  const [gamePlayState, setGamePlayState] = useState<{
+    gameResult: string | null;
+    placeBetClicked: boolean;
+  }>({ gameResult: null, placeBetClicked: false });
 
   console.log(wordToGuess);
 
@@ -67,8 +68,6 @@ function App() {
     },
     [isWordLoser, wordToGuess, points],
   );
-
-  console.log('points', points);
 
   //handling any keypress
   useEffect(() => {
@@ -118,7 +117,6 @@ function App() {
 
   useEffect(() => {
     handleWonBet();
-    setBetAddedBack(false); //balance back to false so that the bet amount is added back only once after user wins
   }, [points]);
 
   function handleResetGame() {
@@ -128,29 +126,42 @@ function App() {
     setSessionActive(false);
     setBet(undefined);
     setTimeRemaining(60);
+    setBetAddedBack(false);
   }
   useEffect(() => {
     if (points >= 3 && gameSessionEnded) {
-      setGameResult('won');
+      setGamePlayState((prevState) => ({
+        ...prevState,
+        gameResult: 'won',
+      }));
     } else if (!sessionActive && gameSessionEnded) {
-      setGameResult('lost');
+      setGamePlayState((prevState) => ({
+        ...prevState,
+        gameResult: 'lost',
+      }));
     }
   }, [points, sessionActive, gameSessionEnded]);
 
   function handleTimeUp() {
     handleResetGame();
-    setShowBetText(false);
-    setPlaceBetClicked(false);
+    setGamePlayState((prevState) => ({
+      ...prevState,
+      placeBetClicked: false,
+    }));
     setGameSessionEnded(true);
   }
-
   const handleBetCreate = useCallback((newBet: number) => {
-    setPlaceBetClicked(true);
+    setGamePlayState((prevState) => ({
+      ...prevState,
+      placeBetClicked: true,
+    }));
     setPoints(0);
     setBet(newBet);
     setBalance((prevBalance) => prevBalance - newBet);
-    setBetAddedBack(true);
-    setShowBetText(true);
+    setGamePlayState((prevState) => ({
+      ...prevState,
+      gameResult: null,
+    }));
   }, []);
   const timer = useRef<number | undefined>(undefined);
 
@@ -218,12 +229,16 @@ function App() {
         onStartSession={handleStartSession}
         balance={balance}
         bet={bet}
-        setBet={setBet}
-        showBetText={showBetText}
-        placeBetClicked={placeBetClicked}
-        gameResult={gameResult}
-        sessionActive={sessionActive}
+        onCreateBet={setBet}
+        gamePlayState={gamePlayState}
       />
+      {betAddedBack && (
+        <div
+          className={`${style.betAddedBackText} ${betAddedBack ? style.betAddedBackTextVisible : ''}`}
+        >
+          Your bet has been added back!
+        </div>
+      )}
     </>
   );
 }

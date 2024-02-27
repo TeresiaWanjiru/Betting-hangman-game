@@ -1,41 +1,28 @@
-import React, { ChangeEvent, useEffect, useRef } from 'react';
+import React, { ChangeEvent } from 'react';
 import style from './Keyboard.module.css';
 import PointConfetti from './PointConfetti';
 
 type BettingLogicProps = {
   balance: number;
   bet: number;
-  setBet: React.Dispatch<React.SetStateAction<number>>;
+  onCreateBet: React.Dispatch<React.SetStateAction<number>>;
   onCreate: (betAmount: number) => void;
   onStartSession: () => void;
   placeBetClicked: boolean;
-  showBetText: boolean;
-  gameResult: string | null;
-  sessionActive: boolean;
+  gamePlayState: {
+    gameResult: string | null;
+    placeBetClicked: boolean;
+  };
 };
 
 const BettingLogic: React.FC<BettingLogicProps> = ({
   balance,
   bet,
-  setBet,
-  placeBetClicked,
-  showBetText,
+  onCreateBet,
   onCreate,
   onStartSession,
-  gameResult,
-  sessionActive,
+  gamePlayState,
 }: BettingLogicProps) => {
-  const gameResultWonRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (gameResultWonRef.current) {
-      const rect = gameResultWonRef.current.getBoundingClientRect();
-      const x = rect.left;
-      const y = rect.top;
-      console.log('x and y of won text', x, y);
-    }
-  }, [gameResult]);
-
   const placeBet = () => {
     if (isNaN(bet) || bet <= 0 || bet > balance) {
       console.error('Invalid bet amount');
@@ -52,7 +39,7 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
 
   const handleLocalValueChange = (e: ChangeEvent<HTMLInputElement>) => {
     const inputText = e.target.value.replace(/[^0-9]/g, '');
-    setBet(Number(inputText));
+    onCreateBet(Number(inputText));
   };
 
   return (
@@ -66,38 +53,36 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
             type="number"
             value={isNaN(bet) ? '' : bet}
             onChange={handleLocalValueChange}
-            disabled={placeBetClicked}
+            disabled={gamePlayState.placeBetClicked}
           />
         </span>
         {bet <= 0 && <div className={style.errorText}>Invalid bet amount</div>}
 
         {bet >= 1000 && (
-          <div className={style.errorText}>Invalid bet amount</div>
+          <div className={style.errorText}>Amount exceeds balance</div>
         )}
 
         <button
           className={style.placeBetBtn}
           onClick={placeBet}
-          disabled={placeBetClicked}
+          disabled={gamePlayState.placeBetClicked}
         >
           Place bet
         </button>
       </div>
-      {showBetText && (
+      {gamePlayState.placeBetClicked && (
         <div className={style.animatedText}>
           You bet <span>{bet}</span> points!
         </div>
       )}
-      {gameResult === 'won' && !sessionActive && (
+      {gamePlayState.gameResult === 'won' && (
         <>
-          <div className={style.gameResult_won} ref={gameResultWonRef}>
-            You won! Congratulations!
-          </div>
+          <div className={style.gameResult_won}>You won! Congratulations!</div>
+          <PointConfetti />
         </>
       )}
-      <PointConfetti />
-      {gameResult === 'lost' && !sessionActive && (
-        <div className={style.gameResult_lost}>You lost.Try again</div>
+      {gamePlayState.gameResult === 'lost' && (
+        <div className={style.gameResult_lost}>You lost. Try again</div>
       )}
     </>
   );
