@@ -17,19 +17,20 @@ function App() {
   const [wordToGuess, setWordToGuess] = useState(getWord);
   const [lettersGuessed, setLettersGuessed] = useState<string[]>([]);
   const [sessionActive, setSessionActive] = useState<boolean>(false);
+  const [gameSessionEnded, setGameSessionEnded] = useState<boolean>(false);
   const [balance, setBalance] = useState<number>(1000);
-  const [betAmount, setBetAmount] = useState<number>(0);
+  const [betAmount, setBetAmount] = useState<number | undefined>(undefined);
   const [points, setPoints] = useState<number>(0);
   const [betAddedBack, setBetAddedBack] = useState<boolean>(false);
+
+  //timing states
   const [timeRemaining, setTimeRemaining] = useState<number>(60);
-  console.log('bet amount', betAmount);
 
   //win/lose and place bet clicked states
   const [gamePlayState, setGamePlayState] = useState<{
     gameResult: string | null;
     placeBetClicked: boolean;
-    gameSessionEnded: boolean;
-  }>({ gameResult: null, placeBetClicked: false, gameSessionEnded: false });
+  }>({ gameResult: null, placeBetClicked: false });
 
   console.log(wordToGuess);
 
@@ -106,7 +107,7 @@ function App() {
     };
   }, [lettersGuessed, sessionActive]);
 
-  // handles the bet balance when user wins
+  // handles the betting balance when user wins
   const handleWonBet = useCallback(() => {
     if (points === 3 && !betAddedBack) {
       setBalance((prevBalance) => prevBalance + betAmount);
@@ -116,59 +117,42 @@ function App() {
 
   useEffect(() => {
     handleWonBet();
-  }, [points, handleWonBet]);
+  }, [points]);
+
+  function handleResetGame() {
+    setBalance(1000);
+    setWordToGuess(getWord());
+    setLettersGuessed([]);
+    setSessionActive(false);
+    setBetAmount(undefined);
+    setTimeRemaining(60);
+    setBetAddedBack(false);
+  }
 
   useEffect(() => {
-    if (points >= 3 && gamePlayState.gameSessionEnded) {
+    if (points >= 3 && gameSessionEnded) {
       setGamePlayState((prevState) => ({
         ...prevState,
         gameResult: 'won',
       }));
-    } else if (!sessionActive && gamePlayState.gameSessionEnded) {
+    } else if (!sessionActive && gameSessionEnded) {
       setGamePlayState((prevState) => ({
         ...prevState,
         gameResult: 'lost',
       }));
     }
-  }, [points, sessionActive, gamePlayState.gameSessionEnded]);
+  }, [points, sessionActive, gameSessionEnded]);
 
   function handleTimeUp() {
-    setBalance(1000);
-    setWordToGuess(getWord());
-    setLettersGuessed([]);
-    setSessionActive(false);
-    setBetAmount(0);
-    setTimeRemaining(60);
-    setBetAddedBack(false);
+    handleResetGame();
     setGamePlayState((prevState) => ({
       ...prevState,
       placeBetClicked: false,
-      gameSessionEnded: true,
     }));
+    setGameSessionEnded(true);
   }
-  console.log(balance);
 
-  // const handleBetCreate = useCallback((newBet: number) => {
-  //   setGamePlayState((prevState) => ({
-  //     ...prevState,
-  //     placeBetClicked: false,
-  //     gameSessionEnded: false,
-  //   }));
-  //   setGamePlayState((prevState) => ({
-  //     ...prevState,
-  //     placeBetClicked: true,
-  //     gameResult: null,
-  //   }));
-  //   setPoints(0);
-  //   setBetAmount(newBet);
-  //   setBalance((prevBalance) => prevBalance - newBet);
-  // }, []);
-  const handleBetCreate = (newBet: number) => {
-    setGamePlayState((prevState) => ({
-      ...prevState,
-      placeBetClicked: false,
-      gameSessionEnded: false,
-    }));
+  const handleBetCreate = useCallback((newBet: number) => {
     setGamePlayState((prevState) => ({
       ...prevState,
       placeBetClicked: true,
@@ -177,8 +161,7 @@ function App() {
     setPoints(0);
     setBetAmount(newBet);
     setBalance((prevBalance) => prevBalance - newBet);
-  };
-
+  }, []);
   const timer = useRef<number | undefined>(undefined);
 
   //timer and session starts after clicking place bet
@@ -241,14 +224,14 @@ function App() {
       </div>
       <Points points={points} />
       <BettingLogic
+        onCreate={handleBetCreate}
+        onStartSession={handleStartSession}
         balance={balance}
         betAmount={betAmount}
         onCreateBetAmount={setBetAmount}
-        onCreate={handleBetCreate}
-        onStartSession={handleStartSession}
         gamePlayState={gamePlayState}
       />
-      {betAddedBack && gamePlayState.placeBetClicked && (
+      {betAddedBack && (
         <div
           className={`${style.betAddedBackText} ${betAddedBack ? style.betAddedBackTextVisible : ''}`}
         >

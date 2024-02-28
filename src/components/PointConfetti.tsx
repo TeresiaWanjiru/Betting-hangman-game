@@ -21,7 +21,7 @@ const PointConfetti = () => {
       friction={1}
       run={true}
       recycle={true}
-      numberOfPieces={400}
+      numberOfPieces={600}
       wind={0}
       gravity={0.1}
       initialVelocityX={4}
