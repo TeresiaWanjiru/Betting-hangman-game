@@ -60,7 +60,6 @@ const BackgroundImage = () => {
       context.globalAlpha = 1;
     };
 
-    console.log('img width and height', img.width, img.height);
     const fadeTransition = (timestamp: DOMHighResTimeStamp) => {
       const elapsed = timestamp - lastTimestamp.current;
 

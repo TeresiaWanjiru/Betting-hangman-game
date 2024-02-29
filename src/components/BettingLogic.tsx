@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import style from './Keyboard.module.css';
 import PointConfetti from './PointConfetti';
 
-type BettingLogicProps = {
+export type BettingLogicProps = {
   balance: number;
   betAmount: number;
   onCreateBetAmount: React.Dispatch<React.SetStateAction<number>>;
@@ -48,7 +48,6 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
     let inputText = e.target.value.replace(/[^0-9]/g, '');
     inputText = inputText.replace(/^0+/, '');
     // setInputValue(Number(inputText));
-    console.log('after', inputText, 'before', betAmount);
 
     onCreateBetAmount(Number(inputText));
     e.target.value = inputText;
@@ -64,7 +63,7 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
             type="number"
             value={betAmount}
             onChange={handleLocalValueChange}
-            disabled={gamePlayState.placeBetClicked}
+            disabled={gamePlayState?.placeBetClicked}
           />
         </span>
         {betAmount < 0 && (
@@ -78,7 +77,7 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
         <button
           className={style.neon_btn}
           onClick={placeBet}
-          disabled={gamePlayState.placeBetClicked}
+          disabled={gamePlayState?.placeBetClicked}
         >
           Place bet
         </button>
