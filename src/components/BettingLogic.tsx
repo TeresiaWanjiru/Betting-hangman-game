@@ -5,7 +5,7 @@ import PointConfetti from './PointConfetti';
 export type BettingLogicProps = {
   balance: number;
   betAmount: number;
-  onCreateBetAmount: React.Dispatch<React.SetStateAction<number>>;
+  onChangeBetAmount: React.Dispatch<React.SetStateAction<number>>;
   onCreate: (betAmount: number) => void;
   onStartSession: () => void;
   gamePlayState: {
@@ -18,12 +18,17 @@ export type BettingLogicProps = {
 const BettingLogic: React.FC<BettingLogicProps> = ({
   balance,
   betAmount,
-  onCreateBetAmount,
+  onChangeBetAmount,
   onCreate,
   onStartSession,
   gamePlayState,
 }: BettingLogicProps) => {
   // const [inputValue, setInputValue] = useState<number>(0);
+  // useEffect(() => {
+  //   if (betAmount === 0) {
+  //     setInputValue(0);
+  //   }
+  // }, [betAmount]);
   const placeBet = () => {
     if (isNaN(betAmount) || betAmount <= 0 || betAmount > balance) {
       console.error('Invalid bet amount');
@@ -38,24 +43,18 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
     onStartSession();
   };
 
-  // useEffect(() => {
-  //   if (betAmount === 0) {
-  //     setInputValue(0);
-  //   }
-  // }, [betAmount]);
-
   const handleLocalValueChange = (e: ChangeEvent<HTMLInputElement>) => {
     let inputText = e.target.value.replace(/[^0-9]/g, '');
     inputText = inputText.replace(/^0+/, '');
     // setInputValue(Number(inputText));
 
-    onCreateBetAmount(Number(inputText));
+    onChangeBetAmount(Number(inputText));
     e.target.value = inputText;
   };
   return (
     <>
       <div className={style.bettingLogic}>
-        <p>Balance: {balance}</p>
+        <p data-testid="balance">Balance: {balance}</p>
         <span>
           Bet Amount :
           <input
@@ -63,7 +62,8 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
             type="number"
             value={betAmount}
             onChange={handleLocalValueChange}
-            disabled={gamePlayState?.placeBetClicked}
+            disabled={gamePlayState.placeBetClicked}
+            data-testid="bet_amount_input"
           />
         </span>
         {betAmount < 0 && (
@@ -75,9 +75,10 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
         )}
 
         <button
-          className={style.neon_btn}
+          className={style.neonBtn}
           onClick={placeBet}
-          disabled={gamePlayState?.placeBetClicked}
+          disabled={gamePlayState.placeBetClicked}
+          data-testid="place_bet_button"
         >
           Place bet
         </button>
@@ -89,12 +90,12 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
       )}
       {gamePlayState.gameResult === 'won' && gamePlayState.gameSessionEnded && (
         <>
-          <div className={style.gameResult_won}>You won! Congratulations!</div>
+          <div className={style.gameResultWon}>You won! Congratulations!</div>
           <PointConfetti />
         </>
       )}
       {gamePlayState.gameResult === 'lost' && (
-        <div className={style.gameResult_lost}>You lost. Try again</div>
+        <div className={style.gameResultLost}>You lost. Try again</div>
       )}
     </>
   );

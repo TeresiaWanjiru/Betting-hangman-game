@@ -7,7 +7,6 @@ const KEYS: string[] = Array.from(
   { length: endCharCode - startCharCode + 1 },
   (_, index) => String.fromCharCode(startCharCode + index),
 );
-console.log('KEYS', KEYS);
 
 type KeyboardProps = {
   OnAddGuessedLetter: (letter: string) => void;

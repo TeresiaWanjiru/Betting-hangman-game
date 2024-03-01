@@ -22,7 +22,6 @@ function App() {
   const [points, setPoints] = useState<number>(0);
   const [betAddedBack, setBetAddedBack] = useState<boolean>(false);
   const [timeRemaining, setTimeRemaining] = useState<number>(60);
-  console.log('bet amount', betAmount);
 
   //win/lose and place bet clicked states
   const [gamePlayState, setGamePlayState] = useState<{
@@ -146,23 +145,7 @@ function App() {
       gameSessionEnded: true,
     }));
   }
-  console.log(balance);
 
-  // const handleBetCreate = useCallback((newBet: number) => {
-  //   setGamePlayState((prevState) => ({
-  //     ...prevState,
-  //     placeBetClicked: false,
-  //     gameSessionEnded: false,
-  //   }));
-  //   setGamePlayState((prevState) => ({
-  //     ...prevState,
-  //     placeBetClicked: true,
-  //     gameResult: null,
-  //   }));
-  //   setPoints(0);
-  //   setBetAmount(newBet);
-  //   setBalance((prevBalance) => prevBalance - newBet);
-  // }, []);
   const handleBetCreate = (newBet: number) => {
     setGamePlayState((prevState) => ({
       ...prevState,
@@ -183,10 +166,10 @@ function App() {
 
   //timer and session starts after clicking place bet
   const handleStartSession = useCallback(() => {
-    setSessionActive(true);
     const id = window.setInterval(() => {
       setTimeRemaining((prevTime) => {
         if (prevTime > 0) {
+          setSessionActive(true);
           return prevTime - 1;
         } else {
           clearInterval(id);
@@ -243,7 +226,7 @@ function App() {
       <BettingLogic
         balance={balance}
         betAmount={betAmount}
-        onCreateBetAmount={setBetAmount}
+        onChangeBetAmount={setBetAmount}
         onCreate={handleBetCreate}
         onStartSession={handleStartSession}
         gamePlayState={gamePlayState}

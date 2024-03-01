@@ -169,7 +169,7 @@ img.fadeInImage {
 }
 
 /* neon button */
-.neon_btn {
+.neonBtn {
   color: #0d3c3c;
   font-weight: 600;
   box-shadow:
@@ -183,7 +183,7 @@ img.fadeInImage {
   align-self: center;
   cursor: pointer;
 }
-.neon_btn:after {
+.neonBtn :after {
   position: absolute;
   content: '';
   width: 100%;
@@ -196,11 +196,11 @@ img.fadeInImage {
     0 0 5px #d10bf49b inset;
   transition: all 0.3s ease;
 }
-.neon_btn:hover {
+.neonBtn :hover {
   border: 1px solid #ddbde39b;
 }
 
-.neon_btn:active {
+.neonBtn :active {
   top: 2px;
 }
 .pointsContainer {
@@ -308,7 +308,7 @@ span {
   margin-left: 0.6rem;
   color: #110714;
 }
-.gameResult_won {
+.gameResultWon {
   position: fixed;
   z-index: 1000;
   font-size: 19px;
@@ -335,7 +335,7 @@ span {
   animation-fill-mode: forwards;
   animation: shine 2s linear infinite;
 }
-.gameResult_lost {
+.gameResultLost {
   position: fixed;
   z-index: 1000;
   font-size: 19px;
