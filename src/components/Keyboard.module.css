@@ -419,14 +419,14 @@ span {
 }
 
 .betAddedBackText {
-  font-size: 1rem;
+  font-size: 1.3rem;
   text-align: center;
   font-weight: 600;
   position: absolute;
   text-transform: uppercase;
   color: rgb(69, 0, 85);
   top: 35%;
-  right: 3rem;
+  right: 1.6rem;
   transform: translate(0, -50%);
   z-index: 1;
   animation: blink 2s linear infinite;

@@ -18,10 +18,10 @@ function App() {
   const [lettersGuessed, setLettersGuessed] = useState<string[]>([]);
   const [sessionActive, setSessionActive] = useState<boolean>(false);
   const [balance, setBalance] = useState<number>(1000);
-  const [betAmount, setBetAmount] = useState<number>(0);
+  const [betAmount, setBetAmount] = useState<number | undefined>(0);
   const [points, setPoints] = useState<number>(0);
   const [betAddedBack, setBetAddedBack] = useState<boolean>(false);
-  const [timeRemaining, setTimeRemaining] = useState<number>(60);
+  const [timeRemaining, setTimeRemaining] = useState<number>(30);
 
   //win/lose and place bet clicked states
   const [gamePlayState, setGamePlayState] = useState<{
@@ -226,7 +226,7 @@ function App() {
       <BettingLogic
         balance={balance}
         betAmount={betAmount}
-        onCreateBetAmount={setBetAmount}
+        onChangeBetAmount={setBetAmount}
         onCreate={handleBetCreate}
         onStartSession={handleStartSession}
         gamePlayState={gamePlayState}

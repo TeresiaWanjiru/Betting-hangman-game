@@ -44,13 +44,18 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
   };
 
   const handleLocalValueChange = (e: ChangeEvent<HTMLInputElement>) => {
-    let inputText = e.target.value.replace(/[^0-9]/g, '');
-    inputText = inputText.replace(/^0+/, '');
+    const inputText = e.target.value.replace(/[^0-9]/g, '');
+    // inputText = inputText.replace(/^0+/, '');
     // setInputValue(Number(inputText));
 
     onChangeBetAmount(Number(inputText));
     e.target.value = inputText;
   };
+  const handleInputFocus: React.FocusEventHandler<HTMLInputElement> = (e) => {
+    e.target.value = '';
+    // handleLocalValueChange(e);
+  };
+
   return (
     <>
       <div className={style.bettingLogic}>
@@ -62,6 +67,7 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
             type="number"
             value={betAmount}
             onChange={handleLocalValueChange}
+            onFocus={handleInputFocus}
             disabled={gamePlayState.placeBetClicked}
             data-testid="bet_amount_input"
           />

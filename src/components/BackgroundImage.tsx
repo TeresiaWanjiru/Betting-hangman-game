@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import style from './Keyboard.module.css';
 
-//images
 import city1 from '/images/city1.png';
 import city2 from '/images/city2.png';
 import city3 from '/images/city3.png';
@@ -79,7 +78,6 @@ const BackgroundImage = () => {
         drawImage(alpha);
         requestAnimationFrame(fadeTransition);
       } else {
-        // Switch to the next image after the entire sequence
         lastTimestamp.current = timestamp;
         setImageIndex((prevIndex) => (prevIndex + 1) % IMAGES.length);
         fadeTransition(timestamp);

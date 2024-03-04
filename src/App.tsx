@@ -108,14 +108,22 @@ function App() {
   // handles the bet balance when user wins
   const handleWonBet = useCallback(() => {
     if (points === 3 && !betAddedBack) {
-      setBalance((prevBalance) => prevBalance + betAmount);
-      setBetAddedBack(true);
+      if (sessionActive && !gamePlayState.gameSessionEnded) {
+        setBalance((prevBalance) => prevBalance + betAmount);
+        setBetAddedBack(true);
+      }
     }
-  }, [points, betAmount, betAddedBack]);
+  }, [
+    points,
+    betAmount,
+    betAddedBack,
+    sessionActive,
+    gamePlayState.gameSessionEnded,
+  ]);
 
   useEffect(() => {
     handleWonBet();
-  }, [points, handleWonBet]);
+  }, [points, handleWonBet, sessionActive, gamePlayState.gameSessionEnded]);
 
   useEffect(() => {
     if (points >= 3 && gamePlayState.gameSessionEnded) {
