@@ -5,7 +5,7 @@ import PointConfetti from './PointConfetti';
 export type BettingLogicProps = {
   balance: number;
   betAmount: number;
-  onChangeBetAmount: React.Dispatch<React.SetStateAction<number>>;
+  onBetAmountChange: React.Dispatch<React.SetStateAction<number>>;
   onCreate: (betAmount: number) => void;
   onStartSession: () => void;
   gamePlayState: {
@@ -18,17 +18,12 @@ export type BettingLogicProps = {
 const BettingLogic: React.FC<BettingLogicProps> = ({
   balance,
   betAmount,
-  onChangeBetAmount,
+  onBetAmountChange,
   onCreate,
   onStartSession,
   gamePlayState,
 }: BettingLogicProps) => {
-  // const [inputValue, setInputValue] = useState<number>(0);
-  // useEffect(() => {
-  //   if (betAmount === 0) {
-  //     setInputValue(0);
-  //   }
-  // }, [betAmount]);
+  console.log(onBetAmountChange);
   const placeBet = () => {
     if (isNaN(betAmount) || betAmount <= 0 || betAmount > balance) {
       console.error('Invalid bet amount');
@@ -45,15 +40,12 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
 
   const handleLocalValueChange = (e: ChangeEvent<HTMLInputElement>) => {
     const inputText = e.target.value.replace(/[^0-9]/g, '');
-    // inputText = inputText.replace(/^0+/, '');
-    // setInputValue(Number(inputText));
-
-    onChangeBetAmount(Number(inputText));
+    const inputNumber = Number(inputText);
+    onBetAmountChange(inputNumber);
     e.target.value = inputText;
   };
   const handleInputFocus: React.FocusEventHandler<HTMLInputElement> = (e) => {
     e.target.value = '';
-    // handleLocalValueChange(e);
   };
 
   return (
@@ -66,8 +58,8 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
             className={`${style.betInput}`}
             type="number"
             value={betAmount}
-            onChange={handleLocalValueChange}
             onFocus={handleInputFocus}
+            onChange={handleLocalValueChange}
             disabled={gamePlayState.placeBetClicked}
             data-testid="bet_amount_input"
           />

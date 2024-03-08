@@ -21,7 +21,7 @@ function App() {
   const [betAmount, setBetAmount] = useState<number>(0);
   const [points, setPoints] = useState<number>(0);
   const [betAddedBack, setBetAddedBack] = useState<boolean>(false);
-  const [timeRemaining, setTimeRemaining] = useState<number>(60);
+  const [timeRemaining, setTimeRemaining] = useState<number>(30);
 
   //win/lose and place bet clicked states
   const [gamePlayState, setGamePlayState] = useState<{
@@ -30,7 +30,8 @@ function App() {
     gameSessionEnded: boolean;
   }>({ gameResult: null, placeBetClicked: false, gameSessionEnded: false });
 
-  console.log(wordToGuess);
+  // console.log(wordToGuess);
+  console.log('test');
 
   const wrongGuesses = lettersGuessed.filter((letter) => {
     return !wordToGuess.includes(letter);
@@ -108,22 +109,14 @@ function App() {
   // handles the bet balance when user wins
   const handleWonBet = useCallback(() => {
     if (points === 3 && !betAddedBack) {
-      if (sessionActive && !gamePlayState.gameSessionEnded) {
-        setBalance((prevBalance) => prevBalance + betAmount);
-        setBetAddedBack(true);
-      }
+      setBalance((prevBalance) => prevBalance + betAmount);
+      setBetAddedBack(true);
     }
-  }, [
-    points,
-    betAmount,
-    betAddedBack,
-    sessionActive,
-    gamePlayState.gameSessionEnded,
-  ]);
+  }, [points, betAmount, betAddedBack]);
 
   useEffect(() => {
     handleWonBet();
-  }, [points, handleWonBet, sessionActive, gamePlayState.gameSessionEnded]);
+  }, [points, handleWonBet]);
 
   useEffect(() => {
     if (points >= 3 && gamePlayState.gameSessionEnded) {
@@ -157,7 +150,6 @@ function App() {
   const handleBetCreate = (newBet: number) => {
     setGamePlayState((prevState) => ({
       ...prevState,
-      placeBetClicked: false,
       gameSessionEnded: false,
     }));
     setGamePlayState((prevState) => ({
@@ -174,10 +166,10 @@ function App() {
 
   //timer and session starts after clicking place bet
   const handleStartSession = useCallback(() => {
+    setSessionActive(true);
     const id = window.setInterval(() => {
       setTimeRemaining((prevTime) => {
         if (prevTime > 0) {
-          setSessionActive(true);
           return prevTime - 1;
         } else {
           clearInterval(id);
@@ -189,7 +181,6 @@ function App() {
 
     timer.current = id;
   }, []);
-
   return (
     <>
       <div className={style.hangmanBackgroundContainer}>
@@ -234,7 +225,7 @@ function App() {
       <BettingLogic
         balance={balance}
         betAmount={betAmount}
-        onChangeBetAmount={setBetAmount}
+        onBetAmountChange={setBetAmount}
         onCreate={handleBetCreate}
         onStartSession={handleStartSession}
         gamePlayState={gamePlayState}
