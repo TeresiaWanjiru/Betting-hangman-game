@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 class ConfettiParticle {
   private x: number;
@@ -104,8 +104,8 @@ const Confetti = () => {
       }
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Create new confetti particles 1 in 10 chances if 0.9
-      if (Math.random() > 0.8) {
+      // Create new confetti particles 1 in 10 chances if 0.9...
+      if (Math.random() > 0.7) {
         const randomX = Math.random() * canvas.width;
         const rectX = Math.random() * canvas.width;
         if (canvas) {
@@ -139,7 +139,20 @@ const Confetti = () => {
     lastTickTime.current = now;
     animate(now);
   }, [randomColor]);
-  return <canvas ref={canvasRef}></canvas>;
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: 'absolute',
+        width: '60%',
+        height: '98vh',
+        top: 0,
+        left: '20%',
+        border: 'none',
+        zIndex: 2,
+      }}
+    ></canvas>
+  );
 };
 
 export default Confetti;

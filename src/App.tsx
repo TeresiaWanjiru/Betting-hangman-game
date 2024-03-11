@@ -30,8 +30,7 @@ function App() {
     gameSessionEnded: boolean;
   }>({ gameResult: null, placeBetClicked: false, gameSessionEnded: false });
 
-  // console.log(wordToGuess);
-  console.log('test');
+  console.log(wordToGuess);
 
   const wrongGuesses = lettersGuessed.filter((letter) => {
     return !wordToGuess.includes(letter);
@@ -138,7 +137,7 @@ function App() {
     setLettersGuessed([]);
     setSessionActive(false);
     setBetAmount(0);
-    setTimeRemaining(60);
+    setTimeRemaining(30);
     setBetAddedBack(false);
     setGamePlayState((prevState) => ({
       ...prevState,

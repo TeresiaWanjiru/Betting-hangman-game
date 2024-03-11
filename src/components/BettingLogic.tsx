@@ -23,7 +23,6 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
   onStartSession,
   gamePlayState,
 }: BettingLogicProps) => {
-  console.log(onBetAmountChange);
   const placeBet = () => {
     if (isNaN(betAmount) || betAmount <= 0 || betAmount > balance) {
       console.error('Invalid bet amount');
