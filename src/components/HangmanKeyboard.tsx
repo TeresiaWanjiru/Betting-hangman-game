@@ -22,7 +22,7 @@ const HangmanKeyboard = ({
 }: KeyboardProps) => {
   return (
     <div
-      className={`${styles.poppins}`}
+      className={`${styles.keyboard}`}
       style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(75px,1fr))',

@@ -12,17 +12,9 @@ const HangmanText = ({
   reveal = false,
 }: HangmanTextProps) => {
   return (
-    <div
-      className={`${style.poppins}`}
-      style={{
-        display: 'flex',
-        gap: '2rem',
-        fontSize: '4rem',
-        textTransform: 'uppercase',
-      }}
-    >
+    <div className={`${style.hangmanText}`}>
       {wordToGuess.split('').map((letter, index) => (
-        <span style={{ borderBottom: '.15em solid black' }} key={index}>
+        <span className={style.underline} key={index}>
           <span
             style={{
               visibility:

@@ -5,7 +5,11 @@ type PointsProps = {
 };
 
 const Points = ({ points }: PointsProps) => {
-  return <div className={style.pointsContainer}>Points: {points}</div>;
+  return (
+    <div className={style.pointsContainer}>
+      <p>Points: {points}</p>
+    </div>
+  );
 };
 
 export default Points;

@@ -22,7 +22,9 @@ function App() {
   const [points, setPoints] = useState<number>(0);
   const [betAddedBack, setBetAddedBack] = useState<boolean>(false);
   const [timeRemaining, setTimeRemaining] = useState<number>(30);
-
+  const [showHangmanKeyboard, setShowHangmanKeyboard] = useState<boolean>(
+    window.innerWidth >= 600,
+  );
   //win/lose and place bet clicked states
   const [gamePlayState, setGamePlayState] = useState<{
     gameResult: string | null;
@@ -105,6 +107,18 @@ function App() {
     };
   }, [lettersGuessed, sessionActive]);
 
+  //handling screen size
+  useEffect(() => {
+    const handleResize = () => {
+      setShowHangmanKeyboard(window.innerWidth >= 700);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   // handles the bet balance when user wins
   const handleWonBet = useCallback(() => {
     if (points === 3 && !betAddedBack) {
@@ -205,19 +219,21 @@ function App() {
             lettersGuessed={lettersGuessed}
             wordToGuess={wordToGuess}
           />
-          <HangmanKeyboard
-            disabled={
-              isWordLoser ||
-              isWordWinnerRef.current ||
-              !sessionActive ||
-              !betAmount
-            }
-            activeLetters={lettersGuessed.filter((letter) =>
-              wordToGuess.includes(letter),
-            )}
-            inactiveLetters={wrongGuesses}
-            OnAddGuessedLetter={handleAddGuessedLetter}
-          />
+          {showHangmanKeyboard && (
+            <HangmanKeyboard
+              disabled={
+                isWordLoser ||
+                isWordWinnerRef.current ||
+                !sessionActive ||
+                !betAmount
+              }
+              activeLetters={lettersGuessed.filter((letter) =>
+                wordToGuess.includes(letter),
+              )}
+              inactiveLetters={wrongGuesses}
+              OnAddGuessedLetter={handleAddGuessedLetter}
+            />
+          )}
         </div>
       </div>
       <Points points={points} />

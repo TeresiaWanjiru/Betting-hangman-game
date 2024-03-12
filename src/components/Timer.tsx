@@ -1,3 +1,4 @@
+import style from './Keyboard.module.css';
 type TimerProps = {
   timeRemaining: number;
 };
@@ -5,15 +6,7 @@ type TimerProps = {
 const Timer = ({ timeRemaining }: TimerProps) => {
   return (
     <>
-      <div
-        style={{
-          fontSize: '30px',
-          fontWeight: '700',
-          color: 'black',
-        }}
-      >
-        Timer: {timeRemaining} seconds
-      </div>
+      <div className={style.timer}>Timer: {timeRemaining} seconds</div>
     </>
   );
 };

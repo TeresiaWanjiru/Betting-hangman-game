@@ -1,3 +1,4 @@
+import style from './Keyboard.module.css';
 const HEAD = (
   <div
     style={{
@@ -89,7 +90,7 @@ const BODY_PARTS = [HEAD, BODY, LEFT_ARM, RIGHT_ARM, LEFT_LEG, RIGHT_LEG];
 
 const HangmanDrawing = ({ numbersGuessed }: HangmanProps) => {
   return (
-    <div style={{ position: 'relative' }}>
+    <div className={style.hangmanFigure}>
       {BODY_PARTS.slice(0, numbersGuessed).map((part, index) => (
         <div key={index}>{part}</div>
       ))}

@@ -91,3 +91,23 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
 };
 
 export default BettingLogic;
+
+
+
+
+
+
+//build 1
+dist/index.html                   0.87 kB │ gzip:  0.50 kB
+dist/assets/index-BvP5Mv_V.css    6.96 kB │ gzip:  1.90 kB
+dist/assets/index-MRblGerU.js   160.84 kB │ gzip: 52.69 kB
+
+//build 2
+> hangman@0.0.0 build
+> tsc && vite build
+
+vite v5.1.1 building for production...
+✓ 63 modules transformed.
+dist/index.html                   0.87 kB │ gzip:  0.50 kB
+dist/assets/index-BvP5Mv_V.css    6.96 kB │ gzip:  1.90 kB
+dist/assets/index-CvcAOZU0.js   188.89 kB │ gzip: 61.36 kB
