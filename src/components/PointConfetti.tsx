@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
-
+import style from './Keyboard.module.css';
 class ConfettiParticle {
   private x: number;
   y: number;
@@ -151,6 +151,7 @@ const Confetti = () => {
         border: 'none',
         zIndex: 2,
       }}
+      className={style.confetti}
     ></canvas>
   );
 };

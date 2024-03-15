@@ -3,6 +3,7 @@ import style from './Keyboard.module.css';
 import PointConfetti from './PointConfetti';
 
 export type BettingLogicProps = {
+  points: number;
   balance: number;
   betAmount: number;
   onBetAmountChange: React.Dispatch<React.SetStateAction<number>>;
@@ -22,6 +23,7 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
   onCreate,
   onStartSession,
   gamePlayState,
+  points,
 }: BettingLogicProps) => {
   const placeBet = () => {
     if (isNaN(betAmount) || betAmount <= 0 || betAmount > balance) {
@@ -49,36 +51,41 @@ const BettingLogic: React.FC<BettingLogicProps> = ({
 
   return (
     <>
-      <div className={style.bettingLogic}>
-        <p data-testid="balance">Balance: {balance}</p>
-        <span>
-          Bet Amount :
-          <input
-            className={`${style.betInput}`}
-            type="number"
-            value={betAmount}
-            onFocus={handleInputFocus}
-            onChange={handleLocalValueChange}
+      <div className={style.betingPointsCont}>
+        <div className={style.bettingLogic}>
+          <p data-testid="balance">Balance: {balance}</p>
+          <span>
+            Bet Amount :
+            <input
+              className={`${style.betInput}`}
+              type="number"
+              value={betAmount}
+              onFocus={handleInputFocus}
+              onChange={handleLocalValueChange}
+              disabled={gamePlayState.placeBetClicked}
+              data-testid="bet_amount_input"
+            />
+          </span>
+          {betAmount < 0 && (
+            <div className={style.errorText}>Invalid bet amount</div>
+          )}
+
+          {betAmount >= 1000 && (
+            <div className={style.errorText}>Amount exceeds balance</div>
+          )}
+
+          <button
+            className={style.neonBtn}
+            onClick={placeBet}
             disabled={gamePlayState.placeBetClicked}
-            data-testid="bet_amount_input"
-          />
-        </span>
-        {betAmount < 0 && (
-          <div className={style.errorText}>Invalid bet amount</div>
-        )}
-
-        {betAmount >= 1000 && (
-          <div className={style.errorText}>Amount exceeds balance</div>
-        )}
-
-        <button
-          className={style.neonBtn}
-          onClick={placeBet}
-          disabled={gamePlayState.placeBetClicked}
-          data-testid="place_bet_button"
-        >
-          Place bet
-        </button>
+            data-testid="place_bet_button"
+          >
+            Place bet
+          </button>
+        </div>
+        <div className={style.pointsContainer}>
+          <p>Points: {points}</p>
+        </div>
       </div>
       {gamePlayState.placeBetClicked && (
         <div className={style.animatedText}>

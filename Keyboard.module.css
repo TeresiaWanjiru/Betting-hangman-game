@@ -91,11 +91,11 @@ canvas {
   gap: 1rem;
   margin: 0 auto;
   align-items: center;
-  /* overflow: hidden; */
+  overflow: hidden;
 }
 .hangmanBackground {
   width: 100%;
-  height: 50vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -108,6 +108,7 @@ canvas {
   position: absolute;
   top: 93%;
   left: 50%;
+  /* right: 50%; */
   transform: translate(-50%, -50%);
   z-index: 1;
 }
@@ -119,6 +120,10 @@ img.fadeInImage {
   z-index: -1;
   animation: fadeIn 3s;
 }
+
+/* img.fadeInImage.show {
+  opacity: 1;
+} */
 
 .glow_win {
   animation: glow-win 1s ease-in-out infinite alternate;
@@ -203,25 +208,24 @@ img.fadeInImage {
 .neonBtn :active {
   top: 2px;
 }
-.pointsContainer,
-.bettingLogic,
-.betingPointsCont {
-  position: fixed;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
 .pointsContainer {
+  position: fixed;
   left: 20px;
+  top: 50%;
+  display: flex;
+  transform: translateY(-50%);
   background-color: rgba(213, 204, 204, 0.8);
-  padding: 5px;
+  padding: 10px;
   border-radius: 10px;
   font-size: 20px;
   font-weight: 600;
+  flex-direction: column;
 }
-
 .bettingLogic {
+  position: fixed;
+  top: 50%;
   right: 0;
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   font-size: 1.2rem;
@@ -233,12 +237,6 @@ img.fadeInImage {
   margin-right: 1.4rem;
 }
 
-.betingPointsCont {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: calc(100% - 20px);
-}
 span {
   display: flex;
   flex-direction: row;
@@ -458,7 +456,8 @@ span {
 .underline {
   border-bottom: 0.15em solid black;
 }
-
+.confetti {
+}
 /******** media queries **********/
 
 @media screen and (max-width: 600px) {
@@ -474,42 +473,214 @@ span {
   .timer {
     font-size: 20px;
   }
-  .pointsContainer,
-  .bettingLogic,
-  .betingPointsCont {
-    position: static;
-    transform: none;
-    width: auto;
-    margin-bottom: 10px;
-    font-size: 1rem;
-  }
   .bettingLogic {
-    padding: 3px;
+    font-size: 1rem;
+    left: 3px;
+    padding: 0.13rem;
+    top: 58%;
+    margin-right: 6.8rem;
+    width: 70%;
   }
-  .betingPointsCont {
-    flex-direction: column;
+  .neonBtn {
+    font-size: 0.8rem;
+    width: 30%;
+  }
+  .betInput {
+    width: 30%;
+    padding: 0.3rem;
+    height: 1.5rem;
+    font-size: 1rem;
   }
   .animatedText,
   .gameResultWon,
   .gameResultLost {
     font-size: 1.1rem;
     width: 60%;
-    top: 52%;
+    top: 70%;
+  }
+  .pointsContainer {
+    left: 75%;
+    height: 7.59rem;
+    width: 20%;
+    align-content: center;
+    top: 58%;
+  }
+  .pointsContainer p {
+    margin-top: 2rem;
+    font-size: 1.2rem;
     text-align: center;
   }
-
+  .pointsContainer p span {
+    margin-left: 2rem;
+  }
   .keyboard {
     display: none;
   }
   .hangmanText {
     font-size: 3rem;
-    font-weight: 600;
     word-wrap: break-word;
-    position: absolute;
-    top: 40%;
     transform: scale(0.8);
+    margin-top: 12rem;
   }
-  .betAddedBackText {
+}
+
+@media screen and (max-width: 400px) {
+  canvas {
+    width: 100%;
+    height: 45%;
+    border: none;
+  }
+  .hangmanFigure {
+    transform: scale(0.5);
+    transform-origin: top;
+  }
+  .timer {
+    font-size: 25px;
+  }
+  .bettingLogic {
     font-size: 1rem;
+    left: 3px;
+    width: 68%;
+    padding: 0.13rem;
+  }
+  .neonBtn {
+    font-size: 0.8rem;
+    width: 40%;
+  }
+  .betInput {
+    width: 5.4rem;
+    padding: 0.3rem;
+    height: 1.5rem;
+    font-size: 1rem;
+  }
+  .animatedText,
+  .gameResultWon,
+  .gameResultLost {
+    font-size: 1.1rem;
+    width: 60%;
+    margin-top: 1rem;
+  }
+  .pointsContainer {
+    left: 72%;
+    height: 7.59rem;
+    width: 20%;
+    align-content: center;
+    top: 58%;
+  }
+  .pointsContainer p {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    text-align: center;
+  }
+  .pointsContainer p span {
+    margin-left: 2rem;
+  }
+  .keyboard {
+    display: none;
+  }
+  .hangmanText {
+    font-size: 3rem;
+
+    transform: scale(0.5);
+    margin-top: 1rem;
+  }
+}
+/* for iphone 12 pro specifically */
+@media screen and (max-width: 390px) {
+  .hangmanText {
+    font-size: 3rem;
+
+    transform: scale(0.5);
+    margin-top: 6rem;
+  }
+}
+@media screen and (max-width: 300px) {
+  .pointsContainer {
+    left: 72%;
+    height: 8.59rem;
+    width: 20%;
+    align-content: center;
+    top: 58%;
+  }
+  .animatedText,
+  .gameResultWon,
+  .gameResultLost {
+    font-size: 1.1rem;
+    width: 70%;
+    top: 72%;
+  }
+  .bettingLogic {
+    font-size: 1rem;
+    left: 3px;
+    width: 67.9%;
+    padding: 0.13rem;
+  }
+  .hangmanText {
+    font-size: 3rem;
+    word-wrap: break-word;
+    transform: scale(0.4);
+    margin-top: 1rem;
+  }
+}
+@media screen and (max-width: 900px) {
+  canvas {
+    width: 100%;
+    height: 50%;
+    border: none;
+  }
+  .hangmanFigure {
+    transform: scale(0.8);
+    transform-origin: top;
+  }
+  .timer {
+    font-size: 20px;
+  }
+  .bettingLogic {
+    font-size: 1.4rem;
+    left: 3px;
+    top: 58%;
+    margin-right: 6.8rem;
+    width: 50%;
+  }
+  .neonBtn {
+    font-size: 1rem;
+    width: 40%;
+  }
+  .betInput {
+    width: 30%;
+    padding: 0.3rem;
+    height: 1.5rem;
+    font-size: 1.4rem;
+  }
+  .animatedText,
+  .gameResultWon,
+  .gameResultLost {
+    font-size: 1.4rem;
+    width: 60%;
+    top: 85%;
+  }
+  .pointsContainer {
+    left: 75%;
+
+    width: 20%;
+    align-content: center;
+    top: 58%;
+  }
+  .pointsContainer p {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    text-align: center;
+  }
+  .pointsContainer p span {
+    margin-left: 2rem;
+  }
+  .keyboard {
+    margin-top: 17rem;
+  }
+  .hangmanText {
+    font-size: 4rem;
+    word-wrap: break-word;
+    transform: scale(0.8);
+    /* margin-top: 12rem; */
   }
 }

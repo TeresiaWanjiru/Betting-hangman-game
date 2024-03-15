@@ -6,7 +6,6 @@ import HangmanKeyboard from './components/HangmanKeyboard';
 import style from './components/Keyboard.module.css';
 import BackgroundImage from './components/BackgroundImage';
 import Timer from './components/Timer';
-import Points from './components/Points';
 import BettingLogic from './components/BettingLogic';
 
 function getWord() {
@@ -236,7 +235,7 @@ function App() {
           )}
         </div>
       </div>
-      <Points points={points} />
+      {/* <Points points={points} /> */}
       <BettingLogic
         balance={balance}
         betAmount={betAmount}
@@ -244,6 +243,7 @@ function App() {
         onCreate={handleBetCreate}
         onStartSession={handleStartSession}
         gamePlayState={gamePlayState}
+        points={points}
       />
       {betAddedBack && gamePlayState.placeBetClicked && (
         <div
